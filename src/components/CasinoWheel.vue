@@ -482,6 +482,7 @@ const claimBonus = () => {
 }
 
 onMounted(() => {
+  console.log('new deploy test')
   const coins = document.querySelectorAll('.coin')
   coins.forEach((coin, index) => {
     coin.style.animationDelay = `${index * 0.3}s`
