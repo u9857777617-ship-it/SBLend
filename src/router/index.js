@@ -7,6 +7,8 @@ import WheelFdj from '@/views/WheelFdj.vue'
 import WheelGuraFRFDJ from '@/views/WheelGuraFRFDJ.vue'
 import WheelPhantomGR from '@/views/WheelPhantomGR.vue'
 import WheelRudikGR from '@/views/WheelRudikGR.vue'
+import FrScratchView from '@/views/FrScratchView.vue'
+import FrCasesView from '@/views/FrCasesView.vue'
 
 const routes = [
   {
@@ -53,6 +55,36 @@ const routes = [
     path: '/rUd1kGr8',
     name: 'WheelRudikGR',
     component: WheelRudikGR
+  },
+  {
+    path: '/GKz3rSc7-fr',
+    name: 'FrScratchLanding',
+    component: FrScratchView
+  },
+  {
+    path: '/aNd1kSr8-fr',
+    name: 'FrScratchLanding',
+    component: FrScratchView
+  },
+  {
+    path: '/pHa1sTr8-fr',
+    name: 'FrScratchLanding',
+    component: FrScratchView
+  },
+  {
+    path: '/GKx2bOz7-fr',
+    name: 'FrCasesLanding',
+    component: FrCasesView
+  },
+  {
+    path: '/aBx9dR3-fr',
+    name: 'FrCasesLanding',
+    component: FrScratchView
+  },
+  {
+    path: '/pBo9tHm3-fr',
+    name: 'FrCasesLanding',
+    component: FrScratchView
   }
 ]
 
