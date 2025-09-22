@@ -9,6 +9,9 @@ import WheelPhantomGR from '@/views/WheelPhantomGR.vue'
 import WheelRudikGR from '@/views/WheelRudikGR.vue'
 import FrScratchView from '@/views/FrScratchView.vue'
 import FrCasesView from '@/views/FrCasesView.vue'
+import ItCasesPhantom from '@/views/ItCasesPhantom.vue'
+import PtCasesPhantom from '@/views/PtCasesPhantom.vue'
+import PtCasesKozak from '@/views/PtCasesKozak.vue'
 
 const routes = [
   {
@@ -62,29 +65,24 @@ const routes = [
     component: FrScratchView
   },
   {
-    path: '/aNd1kSr8-fr',
-    name: 'FrScratchLanding',
-    component: FrScratchView
-  },
-  {
-    path: '/pHa1sTr8-fr',
-    name: 'FrScratchLanding',
-    component: FrScratchView
-  },
-  {
     path: '/GKx2bOz7-fr',
     name: 'FrCasesLanding',
     component: FrCasesView
   },
   {
-    path: '/aBx9dR3-fr',
-    name: 'FrCasesLanding',
-    component: FrScratchView
+    path: '/GKx2bOz7-pt',
+    name: 'PtCasesKozak',
+    component: PtCasesKozak
   },
   {
-    path: '/pBo9tHm3-fr',
-    name: 'FrCasesLanding',
-    component: FrScratchView
+    path: '/pBo9tHm3-it',
+    name: 'ItCasesPhantom',
+    component: ItCasesPhantom
+  },
+  {
+    path: '/pBo9tHm3-pt',
+    name: 'PtCasesPhantom',
+    component: PtCasesPhantom
   }
 ]
 
