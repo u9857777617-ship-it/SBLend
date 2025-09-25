@@ -8,6 +8,9 @@
           alt="Game Logo"
           decoding="async"
           fetchpriority="high"
+          loading="eager"
+          @load="onLogoLoad"
+          @error="onLogoError"
         />
       </div>
       <div class="loader-spinner"></div>
@@ -96,6 +99,10 @@
               :src="packageClosedImage"
               alt="Закритий пакунок"
               class="package-image package-closed"
+              loading="lazy"
+              decoding="async"
+              @load="onPackageImageLoad"
+              @error="onPackageImageError"
             />
             <img
               v-if="isOpening || revealedDrop !== null"
@@ -103,6 +110,10 @@
               alt="Відкритий пакунок"
               class="package-image package-opened"
               :class="{ 'opening-animation': isOpening }"
+              loading="lazy"
+              decoding="async"
+              @load="onPackageImageLoad"
+              @error="onPackageImageError"
             />
           </div>
 
@@ -287,10 +298,38 @@ const showWinModal = ref(false);
 const lastWinAmount = ref(0);
 const lastWinFs = ref(0);
 
+// Performance optimizations
+const isSlowDevice = ref(false);
+const imagesLoaded = ref(0);
+const totalImages = ref(2); // Logo + package images
+
 // Planned drops array - calculated once at game start
 const plannedDrops = ref<Drop[]>([]);
 
+// Debounced functions for better performance
+let openPackageTimeout: NodeJS.Timeout | null = null;
+let modalTimeout: NodeJS.Timeout | null = null;
+
 const emit = defineEmits(["game-completed", "rewards-claimed"]);
+
+const detectSlowDevice = (): boolean => {
+  // Check for slow device indicators
+  const connection =
+    (navigator as any).connection ||
+    (navigator as any).mozConnection ||
+    (navigator as any).webkitConnection;
+  const slowConnection =
+    connection &&
+    (connection.effectiveType === "slow-2g" ||
+      connection.effectiveType === "2g");
+  const lowMemory =
+    "memory" in performance &&
+    (performance as any).memory?.jsHeapSizeLimit < 1073741824; // Less than 1GB
+  const oldDevice =
+    navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
+
+  return !!(slowConnection || lowMemory || oldDevice);
+};
 
 const rootStyle = computed<CSSProperties>(() => ({
   background: String(props.colorScheme.background),
@@ -301,10 +340,12 @@ const currencySymbol = computed(
   () => props.settings.ui.currencySymbolMap[props.settings.currency]
 );
 const packageClosedImage = computed(
-  () => new URL("../assets/it-package/closed-package.png", import.meta.url).href
+  () =>
+    new URL("../assets/it-package/closed-package.webp", import.meta.url).href
 );
 const packageOpenedImage = computed(
-  () => new URL("../assets/it-package/opened-package.png", import.meta.url).href
+  () =>
+    new URL("../assets/it-package/opened-package.webp", import.meta.url).href
 );
 
 /**
@@ -587,12 +628,31 @@ const getConfettiStyle = (index: number): CSSProperties => {
   };
 };
 
+const onLogoLoad = (): void => {
+  console.log("Logo loaded successfully");
+};
+
+const onLogoError = (): void => {
+  console.error("Error loading logo");
+};
+
+const onPackageImageLoad = (): void => {
+  console.log("Package image loaded successfully");
+};
+
+const onPackageImageError = (): void => {
+  console.error("Error loading package image");
+};
+
 onMounted(() => {
   initializeApp();
 });
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap");
+
 .package-opening-game {
   position: relative;
   width: 100%;
@@ -601,8 +661,11 @@ onMounted(() => {
   background-size: cover;
   background-repeat: no-repeat;
   overflow-x: hidden;
-  font-family: "Arial", sans-serif;
+  font-family: "Montserrat", "Roboto", "Arial", sans-serif;
   color: white;
+  /* Enable hardware acceleration */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 /* Loader Styles */
@@ -651,19 +714,19 @@ onMounted(() => {
 @keyframes logoPulse {
   0%,
   100% {
-    transform: scale(1);
+    transform: scale3d(1, 1, 1);
   }
   50% {
-    transform: scale(1.1);
+    transform: scale3d(1.1, 1.1, 1);
   }
 }
 
 @keyframes spin {
   0% {
-    transform: rotate(0deg);
+    transform: rotate3d(0, 0, 1, 0deg);
   }
   100% {
-    transform: rotate(360deg);
+    transform: rotate3d(0, 0, 1, 360deg);
   }
 }
 
@@ -702,13 +765,14 @@ onMounted(() => {
 
 .game-title {
   font-size: 3rem;
-  font-weight: bold;
+  font-weight: 800;
   margin-bottom: 10px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   background: linear-gradient(45deg, #ffd700, #ffa000);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-family: "Montserrat", sans-serif;
 }
 
 /* Totals Badges (above progress counter) */
@@ -765,20 +829,14 @@ onMounted(() => {
   margin-bottom: 2px;
   text-transform: uppercase;
   font-weight: 600;
+  font-family: "Roboto", sans-serif;
 }
 
 .badge-value {
   font-size: 1.2rem;
-  font-weight: bold;
+  font-weight: 700;
   color: white;
-}
-
-.bonus-badge .badge-value {
-  color: #28a745;
-}
-
-.fs-badge .badge-value {
-  color: #ffd700;
+  font-family: "Montserrat", sans-serif;
 }
 
 /* Progress Counter */
@@ -796,12 +854,14 @@ onMounted(() => {
   font-size: 1rem;
   opacity: 0.9;
   margin-bottom: 5px;
+  font-family: "Roboto", sans-serif;
 }
 
 .counter-value {
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: 700;
   color: #ffd700;
+  font-family: "Montserrat", sans-serif;
 }
 
 /* Package Container - Make packages bigger */
@@ -818,16 +878,19 @@ onMounted(() => {
   background: none;
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.2s ease;
   padding: 20px;
   border-radius: 20px;
   position: relative;
   max-width: 500px;
   width: 95%;
+  /* Enable hardware acceleration */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .package-button:hover:not(:disabled) {
-  transform: scale(1.05);
+  transform: scale3d(1.05, 1.05, 1);
 }
 
 .package-button:disabled {
@@ -842,13 +905,13 @@ onMounted(() => {
 @keyframes packageShake {
   0%,
   100% {
-    transform: translateX(0px);
+    transform: translate3d(0, 0, 0);
   }
   25% {
-    transform: translateX(-2px);
+    transform: translate3d(-2px, 0, 0);
   }
   75% {
-    transform: translateX(2px);
+    transform: translate3d(2px, 0, 0);
   }
 }
 
@@ -866,8 +929,10 @@ onMounted(() => {
   height: 100%;
   object-fit: contain;
   border-radius: 15px;
-  transition: all 0.3s ease;
-  transform: scale(1.2);
+  transition: transform 0.2s ease;
+  transform: scale3d(1.2, 1.2, 1);
+  /* Enable hardware acceleration */
+  will-change: transform;
 }
 
 .package-opened.opening-animation {
@@ -876,38 +941,39 @@ onMounted(() => {
 
 @keyframes openingGlow {
   0% {
-    transform: scale(1.2);
+    transform: scale3d(1.2, 1.2, 1);
     filter: brightness(1);
   }
   50% {
-    transform: scale(1.35);
+    transform: scale3d(1.35, 1.35, 1);
     filter: brightness(1.3) drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
   }
   100% {
-    transform: scale(1.2);
+    transform: scale3d(1.2, 1.2, 1);
     filter: brightness(1);
   }
 }
 
 .tap-hint {
   font-size: 1.2rem;
-  font-weight: bold;
+  font-weight: 600;
   text-align: center;
   color: #ffd700;
   background: rgba(0, 0, 0, 0.7);
   padding: 15px 25px;
   border-radius: 25px;
   animation: tapHintPulse 2s ease-in-out infinite;
+  font-family: "Montserrat", sans-serif;
 }
 
 @keyframes tapHintPulse {
   0%,
   100% {
-    transform: scale(1);
+    transform: scale3d(1, 1, 1);
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
   }
   50% {
-    transform: scale(1.05);
+    transform: scale3d(1.05, 1.05, 1);
     box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
   }
 }
@@ -1028,13 +1094,14 @@ onMounted(() => {
 
 .completion-title {
   font-size: 2.5rem;
-  font-weight: bold;
+  font-weight: 900;
   margin-bottom: 20px;
   background: linear-gradient(45deg, #ffd700, #ffa000);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: titleGlow 2s ease-in-out infinite alternate;
+  font-family: "Montserrat", sans-serif;
 }
 
 @keyframes titleGlow {
@@ -1106,12 +1173,13 @@ onMounted(() => {
   border: none;
   padding: 20px 40px;
   font-size: 1.3rem;
-  font-weight: bold;
+  font-weight: 700;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  font-family: "Montserrat", sans-serif;
 }
 
 .claim-button:hover:not(:disabled) {
@@ -1222,13 +1290,15 @@ onMounted(() => {
   max-width: 400px;
   width: 90%;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  transform: scale(0.8);
+  transform: scale3d(0.8, 0.8, 1);
   opacity: 0;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Enable hardware acceleration */
+  will-change: transform, opacity;
 }
 
 .win-modal.show {
-  transform: scale(1);
+  transform: scale3d(1, 1, 1);
   opacity: 1;
 }
 
@@ -1239,14 +1309,16 @@ onMounted(() => {
 
 .win-text-main {
   font-size: 3rem;
-  font-weight: bold;
+  font-weight: 900;
   color: #ffd700;
   margin-bottom: 20px;
+  font-family: "Montserrat", sans-serif;
 }
 
 .win-details {
   font-size: 1.5rem;
   margin-bottom: 20px;
+  font-family: "Roboto", sans-serif;
 }
 
 .win-amount,
@@ -1262,6 +1334,7 @@ onMounted(() => {
 .win-congratulations {
   font-size: 1.2rem;
   color: #555;
+  font-family: "Roboto", sans-serif;
 }
 
 .win-effects {
@@ -1297,6 +1370,17 @@ onMounted(() => {
   }
   100% {
     transform: translateY(100vh) rotate(360deg);
+  }
+}
+
+/* Reduce confetti for performance on slow devices */
+@media (max-width: 768px) and (max-device-pixel-ratio: 2) {
+  .confetti-piece {
+    display: none;
+  }
+
+  .confetti-piece:nth-child(-n + 5) {
+    display: block;
   }
 }
 </style>

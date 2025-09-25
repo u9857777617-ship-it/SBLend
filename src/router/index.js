@@ -14,7 +14,7 @@ import PtCasesPhantom from "@/views/PtCasesPhantom.vue";
 import PtCasesKozak from "@/views/PtCasesKozak.vue";
 import ScratchCardsView from "@/views/ScratchCardsView.vue";
 import SlotMachineView from "@/views/SlotMachineView.vue";
-import PackageOpeningView from "@/views/PackageOpeningView.vue";
+import PackageOpeningView from "@/views/ITAlexeyPackageView.vue";
 
 const routes = [
   {
@@ -87,16 +87,16 @@ const routes = [
     name: "PtCasesPhantom",
     component: PtCasesPhantom,
   },
-  {
-    path: "/sC4rD8gAmE",
-    name: "ScratchCardsGame",
-    component: ScratchCardsView,
-  },
-  {
-    path: "/sL0tB0nUsG4mE",
-    name: "SlotMachineGame",
-    component: SlotMachineView,
-  },
+  // {
+  //   path: "/sC4rD8gAmE",
+  //   name: "ScratchCardsGame",
+  //   component: ScratchCardsView,
+  // },
+  // {
+  //   path: "/sL0tB0nUsG4mE",
+  //   name: "SlotMachineGame",
+  //   component: SlotMachineView,
+  // },
   {
     path: "/pAcK4gE0pEn1nG",
     name: "PackageOpeningGame",

@@ -61,7 +61,7 @@ const gameSettings = {
 };
 
 const offerUrl = "https://cloud-on-void.art";
-// const logoSrc = new URL("../assets/grantaVinci_logo.png", import.meta.url).href;
+const logoSrc = new URL("../assets/grantaVinci_logo.png", import.meta.url).href;
 
 const onGameCompleted = (result: any) => {
   console.log("Package opening game completed:", result);
