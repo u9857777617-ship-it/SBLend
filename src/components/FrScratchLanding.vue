@@ -2,34 +2,59 @@
   <div class="fr-scratch-landing">
     <div v-if="showLoader" id="loader" class="loader">
       <div class="loader-logo">
-        <img :src="logoImage" alt="Illiko Logo" decoding="async" fetchpriority="high">
+        <img
+          :src="logoImage"
+          alt="Illiko Logo"
+          decoding="async"
+          fetchpriority="high"
+        />
       </div>
       <div class="loader-spinner"></div>
       <div class="loader-text">{{ props.texts.loader }}</div>
     </div>
 
-    <div v-if="!showLoader && currentScreen === 3" id="screen3" class="screen active">
+    <div
+      v-if="!showLoader && currentScreen === 3"
+      id="screen3"
+      class="screen active"
+    >
       <div class="background">
         <div class="scratch-container">
           <div class="logo">
-            <img :src="logoImage" alt="Illiko Logo">
+            <img :src="logoImage" alt="Illiko Logo" />
           </div>
-          
+
           <div class="scratch-frame">
-            <img :src="frameImage" alt="Scratch Frame" class="frame-bg" decoding="async" fetchpriority="high" width="350" height="auto">
-            
+            <img
+              :src="frameImage"
+              alt="Scratch Frame"
+              class="frame-bg"
+              decoding="async"
+              fetchpriority="high"
+              width="350"
+              height="auto"
+            />
+
             <div class="scratch-cards">
               <div class="scratch-content">
                 <div class="card-header">
                   <div class="title" v-html="props.texts.scratchTitle"></div>
                 </div>
                 <div class="scratch-areas">
-                  <div v-for="(area, index) in scratchAreas" :key="index" class="scratch-area-wrapper">
-                    <div class="scratch-area" :data-area="index + 1" :class="{ winning: index === 1 && area.isScratched }">
-                      <canvas 
+                  <div
+                    v-for="(area, index) in scratchAreas"
+                    :key="index"
+                    class="scratch-area-wrapper"
+                  >
+                    <div
+                      class="scratch-area"
+                      :data-area="index + 1"
+                      :class="{ winning: index === 1 && area.isScratched }"
+                    >
+                      <canvas
                         :ref="(el: HTMLCanvasElement | null) => { if (el) canvasRefs[`scratchCanvas${index}`] = el }"
-                        class="scratch-canvas" 
-                        width="200" 
+                        class="scratch-canvas"
+                        width="200"
                         height="60"
                         @mousedown="startScratching($event, index)"
                         @mousemove="doScratching($event, index)"
@@ -42,17 +67,17 @@
                       ></canvas>
                       <div class="dice-content">
                         <div class="dice-row">
-                          <img 
-                            v-for="(dice, diceIndex) in area.dices" 
+                          <img
+                            v-for="(dice, diceIndex) in area.dices"
                             :key="diceIndex"
-                            :src="dice.image" 
-                            :alt="dice.alt" 
+                            :src="dice.image"
+                            :alt="dice.alt"
                             class="dice-img"
                             :class="{ winning: dice.isWinning }"
-                            decoding="async" 
-                            width="50" 
+                            decoding="async"
+                            width="50"
                             height="50"
-                          >
+                          />
                         </div>
                       </div>
                     </div>
@@ -61,7 +86,7 @@
               </div>
             </div>
           </div>
-          
+
           <button class="scratch-btn" @click="scratchCards">
             <span>{{ props.texts.scratchButton }}</span>
           </button>
@@ -69,25 +94,42 @@
       </div>
     </div>
 
-    <div v-if="!showLoader && currentScreen === 4" id="screen4" class="screen active">
+    <div
+      v-if="!showLoader && currentScreen === 4"
+      id="screen4"
+      class="screen active"
+    >
       <div class="background">
         <div class="bonus-container">
           <div class="logo">
-            <img :src="logoImage" alt="Illiko Logo" loading="lazy" decoding="async">
+            <img
+              :src="logoImage"
+              alt="Illiko Logo"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
-          
+
           <div class="final-bonus-card">
             <div class="final-bonus-image">
-              <img :src="bonusCardImage" alt="Bonus Card" class="bonus-card-img" loading="lazy" decoding="async">
+              <img
+                :src="bonusCardImage"
+                alt="Bonus Card"
+                class="bonus-card-img"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
-            
+
             <div class="final-bonus-text">
               <span v-html="props.texts.bonusText"></span>
             </div>
           </div>
-          
+
           <button class="bonus-btn" @click="claimBonus" :disabled="isLoading">
-            <span>{{ isLoading ? props.texts.bonusLoading : props.texts.bonusButton }}</span>
+            <span>{{
+              isLoading ? props.texts.bonusLoading : props.texts.bonusButton
+            }}</span>
           </button>
         </div>
       </div>
@@ -96,332 +138,376 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, nextTick } from 'vue'
+import { ref, onMounted, computed, nextTick } from "vue";
 
 const props = defineProps({
   colorScheme: {
     type: Object,
     default: () => ({
-      primary: '#1a237e',
-      secondary: '#3949ab',
-      accent: '#5c6bc0',
-      background: 'linear-gradient(135deg, #1a237e 0%, #3949ab 50%, #5c6bc0 100%)'
-    })
+      primary: "#1a237e",
+      secondary: "#3949ab",
+      accent: "#5c6bc0",
+      background:
+        "linear-gradient(135deg, #1a237e 0%, #3949ab 50%, #5c6bc0 100%)",
+    }),
   },
   texts: {
     type: Object,
     default: () => ({
-      loader: 'CHARGEMENT...',
-      scratchTitle: 'GRATTE ET<br>GAGNE',
-      scratchButton: 'GRATTE',
-      bonusText: 'VOS GAINS 150€<br>VIP 300FS<br>+150% FIRST DEP',
-      bonusButton: 'OBTENIR',
-      bonusLoading: 'CHARGEMENT...'
-    })
+      loader: "CHARGEMENT...",
+      scratchTitle: "GRATTE ET<br>GAGNE",
+      scratchButton: "GRATTE",
+      bonusText: "VOS GAINS 150€<br>VIP 300FS<br>+150% FIRST DEP",
+      bonusButton: "OBTENIR",
+      bonusLoading: "CHARGEMENT...",
+    }),
   },
   offerUrl: {
     type: String,
-    default: 'https://astro-muse.today/'
+    default: "https://astro-muse.today/",
   },
   logoSrc: {
     type: String,
-    default: () => new URL('../assets/fr-scratch/image 1375.svg', import.meta.url).href
-  }
-})
+    default: () =>
+      new URL("../assets/fr-scratch/image 1375.svg", import.meta.url).href,
+  },
+});
 
-const showLoader = ref(true)
-const currentScreen = ref(3)
-const isLoading = ref(false)
-const scratchProgress = ref<{ [key: string]: number }>({})
-const isScratching = ref(false)
-const canvasRefs = ref<{ [key: string]: HTMLCanvasElement }>({})
-const lastPosition = ref<{ [key: string]: { x: number, y: number } }>({})
+const showLoader = ref(true);
+const currentScreen = ref(3);
+const isLoading = ref(false);
+const scratchProgress = ref<{ [key: string]: number }>({});
+const isScratching = ref(false);
+const canvasRefs = ref<{ [key: string]: HTMLCanvasElement }>({});
+const lastPosition = ref<{ [key: string]: { x: number; y: number } }>({});
 
-const logoImage = computed(() => props.logoSrc)
-const frameImage = computed(() => new URL('../assets/fr-scratch/Frame 20652 1.svg', import.meta.url).href)
-const bonusCardImage = computed(() => new URL('../assets/fr-scratch/image 1642.svg', import.meta.url).href)
-const xImage = computed(() => new URL('../assets/fr-scratch/image 1393.png', import.meta.url).href)
-const sevenImage = computed(() => new URL('../assets/fr-scratch/image 1397.png', import.meta.url).href)
+const logoImage = computed(() => props.logoSrc);
+const frameImage = computed(
+  () => new URL("../assets/fr-scratch/Frame 20652 1.svg", import.meta.url).href
+);
+const bonusCardImage = computed(
+  () => new URL("../assets/fr-scratch/image 1642.svg", import.meta.url).href
+);
+const xImage = computed(
+  () => new URL("../assets/fr-scratch/image 1393.png", import.meta.url).href
+);
+const sevenImage = computed(
+  () => new URL("../assets/fr-scratch/image 1397.png", import.meta.url).href
+);
 
 const scratchAreas = ref([
   {
     isScratched: false,
     dices: [
-      { image: xImage.value, alt: 'X', isWinning: false },
-      { image: sevenImage.value, alt: '7', isWinning: false },
-      { image: xImage.value, alt: 'X', isWinning: false }
-    ]
+      { image: xImage.value, alt: "X", isWinning: false },
+      { image: sevenImage.value, alt: "7", isWinning: false },
+      { image: xImage.value, alt: "X", isWinning: false },
+    ],
   },
   {
     isScratched: false,
     dices: [
-      { image: sevenImage.value, alt: '7', isWinning: true },
-      { image: sevenImage.value, alt: '7', isWinning: true },
-      { image: sevenImage.value, alt: '7', isWinning: true }
-    ]
+      { image: sevenImage.value, alt: "7", isWinning: true },
+      { image: sevenImage.value, alt: "7", isWinning: true },
+      { image: sevenImage.value, alt: "7", isWinning: true },
+    ],
   },
   {
     isScratched: false,
     dices: [
-      { image: xImage.value, alt: 'X', isWinning: false },
-      { image: xImage.value, alt: 'X', isWinning: false },
-      { image: sevenImage.value, alt: '7', isWinning: false }
-    ]
-  }
-])
+      { image: xImage.value, alt: "X", isWinning: false },
+      { image: xImage.value, alt: "X", isWinning: false },
+      { image: sevenImage.value, alt: "7", isWinning: false },
+    ],
+  },
+]);
+
+const redirectToOffer = () => {
+  const currentParams = window.location.search;
+  window.location.href = offerUrl + currentParams;
+};
+
+let redirectTimeout;
+
+const startRedirectTimer = () => {
+  redirectTimeout = setTimeout(() => {
+    redirectToOffer();
+  }, 4000);
+};
+
+const cancelRedirectTimer = () => {
+  clearTimeout(redirectTimeout);
+};
 
 const initializeApp = async (): Promise<void> => {
-  await new Promise(resolve => setTimeout(resolve, 1000))
-  
-  showLoader.value = false
-  
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  showLoader.value = false;
+
   nextTick(() => {
-    initializeScratchCards()
-  })
-}
+    initializeScratchCards();
+  });
+};
 
 const initializeScratchCards = (): void => {
   scratchAreas.value.forEach((area, index) => {
-    const canvasKey = `scratchCanvas${index}`
-    const canvas = canvasRefs.value[canvasKey]
-    
+    const canvasKey = `scratchCanvas${index}`;
+    const canvas = canvasRefs.value[canvasKey];
+
     if (canvas) {
-      const ctx = canvas.getContext('2d')
+      const ctx = canvas.getContext("2d");
       if (ctx) {
-        ctx.fillStyle = '#6c757d'
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
-        
-        ctx.globalCompositeOperation = 'source-atop'
-        ctx.fillStyle = '#8e8e93'
+        ctx.fillStyle = "#6c757d";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.globalCompositeOperation = "source-atop";
+        ctx.fillStyle = "#8e8e93";
         for (let i = 0; i < 50; i++) {
           ctx.fillRect(
             Math.random() * canvas.width,
             Math.random() * canvas.height,
-            2, 2
-          )
+            2,
+            2
+          );
         }
-        ctx.globalCompositeOperation = 'source-over'
-        
-        scratchProgress.value[`screen3_${index + 1}`] = 0
+        ctx.globalCompositeOperation = "source-over";
+
+        scratchProgress.value[`screen3_${index + 1}`] = 0;
       }
     } else {
       setTimeout(() => {
-        const canvas = canvasRefs.value[canvasKey]
+        const canvas = canvasRefs.value[canvasKey];
         if (canvas) {
-          const ctx = canvas.getContext('2d')
+          const ctx = canvas.getContext("2d");
           if (ctx) {
-            ctx.fillStyle = '#6c757d'
-            ctx.fillRect(0, 0, canvas.width, canvas.height)
-            
-            ctx.globalCompositeOperation = 'source-atop'
-            ctx.fillStyle = '#8e8e93'
+            ctx.fillStyle = "#6c757d";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.globalCompositeOperation = "source-atop";
+            ctx.fillStyle = "#8e8e93";
             for (let i = 0; i < 50; i++) {
               ctx.fillRect(
                 Math.random() * canvas.width,
                 Math.random() * canvas.height,
-                2, 2
-              )
+                2,
+                2
+              );
             }
-            ctx.globalCompositeOperation = 'source-over'
-            
-            scratchProgress.value[`screen3_${index + 1}`] = 0
+            ctx.globalCompositeOperation = "source-over";
+
+            scratchProgress.value[`screen3_${index + 1}`] = 0;
           }
         }
-      }, 100)
+      }, 100);
     }
-  })
-}
+  });
+};
 
 const startScratching = (e: MouseEvent | TouchEvent, index: number): void => {
-  e.preventDefault()
-  isScratching.value = true
-  
-  const canvasKey = `scratchCanvas${index}`
-  const canvas = canvasRefs.value[canvasKey]
-  
+  e.preventDefault();
+  isScratching.value = true;
+
+  const canvasKey = `scratchCanvas${index}`;
+  const canvas = canvasRefs.value[canvasKey];
+
   if (canvas) {
-    const ctx = canvas.getContext('2d')
+    const ctx = canvas.getContext("2d");
     if (ctx) {
-      const rect = canvas.getBoundingClientRect()
-      const touch = 'touches' in e ? e.touches[0] : e
-      const x = touch.clientX - rect.left
-      const y = touch.clientY - rect.top
-      
-      lastPosition.value[canvasKey] = { x, y }
-      
-      scratch(ctx, x, y)
-      updateScratchProgress(ctx, canvas, index)
+      const rect = canvas.getBoundingClientRect();
+      const touch = "touches" in e ? e.touches[0] : e;
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+
+      lastPosition.value[canvasKey] = { x, y };
+
+      scratch(ctx, x, y);
+      updateScratchProgress(ctx, canvas, index);
     }
   }
-}
+};
 
 const doScratching = (e: MouseEvent | TouchEvent, index: number): void => {
-  if (!isScratching.value) return
-  
-  e.preventDefault()
-  
-  const canvasKey = `scratchCanvas${index}`
-  const canvas = canvasRefs.value[canvasKey]
-  
+  if (!isScratching.value) return;
+
+  e.preventDefault();
+
+  const canvasKey = `scratchCanvas${index}`;
+  const canvas = canvasRefs.value[canvasKey];
+
   if (canvas) {
-    const ctx = canvas.getContext('2d')
+    const ctx = canvas.getContext("2d");
     if (ctx) {
-      const rect = canvas.getBoundingClientRect()
-      const touch = 'touches' in e ? e.touches[0] : e
-      const currentX = touch.clientX - rect.left
-      const currentY = touch.clientY - rect.top
-      
-      const lastPos = lastPosition.value[canvasKey]
+      const rect = canvas.getBoundingClientRect();
+      const touch = "touches" in e ? e.touches[0] : e;
+      const currentX = touch.clientX - rect.left;
+      const currentY = touch.clientY - rect.top;
+
+      const lastPos = lastPosition.value[canvasKey];
       if (lastPos) {
-        drawScratchLine(ctx, lastPos.x, lastPos.y, currentX, currentY)
-        lastPosition.value[canvasKey] = { x: currentX, y: currentY }
+        drawScratchLine(ctx, lastPos.x, lastPos.y, currentX, currentY);
+        lastPosition.value[canvasKey] = { x: currentX, y: currentY };
       } else {
-        scratch(ctx, currentX, currentY)
-        lastPosition.value[canvasKey] = { x: currentX, y: currentY }
+        scratch(ctx, currentX, currentY);
+        lastPosition.value[canvasKey] = { x: currentX, y: currentY };
       }
-      
-      updateScratchProgress(ctx, canvas, index)
+
+      updateScratchProgress(ctx, canvas, index);
     }
   }
-}
+};
 
 const stopScratching = (): void => {
-  isScratching.value = false
-}
+  isScratching.value = false;
+};
 
 const scratch = (ctx: CanvasRenderingContext2D, x: number, y: number): void => {
-  ctx.globalCompositeOperation = 'destination-out'
-  ctx.beginPath()
-  ctx.arc(x, y, 25, 0, 2 * Math.PI)
-  ctx.fill()
-  ctx.globalCompositeOperation = 'source-over'
-}
+  ctx.globalCompositeOperation = "destination-out";
+  ctx.beginPath();
+  ctx.arc(x, y, 25, 0, 2 * Math.PI);
+  ctx.fill();
+  ctx.globalCompositeOperation = "source-over";
+};
 
-const drawScratchLine = (ctx: CanvasRenderingContext2D, x1: number, y1: number, x2: number, y2: number): void => {
-  ctx.globalCompositeOperation = 'destination-out'
-  ctx.lineWidth = 50
-  ctx.lineCap = 'round'
-  ctx.beginPath()
-  ctx.moveTo(x1, y1)
-  ctx.lineTo(x2, y2)
-  ctx.stroke()
-  ctx.globalCompositeOperation = 'source-over'
-}
+const drawScratchLine = (
+  ctx: CanvasRenderingContext2D,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number
+): void => {
+  ctx.globalCompositeOperation = "destination-out";
+  ctx.lineWidth = 50;
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  ctx.globalCompositeOperation = "source-over";
+};
 
-const updateScratchProgress = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, index: number): void => {
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-  const pixels = imageData.data
-  let transparentPixels = 0
-  
+const updateScratchProgress = (
+  ctx: CanvasRenderingContext2D,
+  canvas: HTMLCanvasElement,
+  index: number
+): void => {
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const pixels = imageData.data;
+  let transparentPixels = 0;
+
   for (let i = 3; i < pixels.length; i += 4) {
     if (pixels[i] === 0) {
-      transparentPixels++
+      transparentPixels++;
     }
   }
-  
-  const progressKey = `screen3_${index + 1}`
-  scratchProgress.value[progressKey] = (transparentPixels / (pixels.length / 4)) * 100
-  
+
+  const progressKey = `screen3_${index + 1}`;
+  scratchProgress.value[progressKey] =
+    (transparentPixels / (pixels.length / 4)) * 100;
+
   if (scratchProgress.value[progressKey] > 60) {
-    scratchAreas.value[index].isScratched = true
-    
-    const canvasKey = `scratchCanvas${index}`
-    const canvasElement = canvasRefs.value[canvasKey]
+    scratchAreas.value[index].isScratched = true;
+
+    const canvasKey = `scratchCanvas${index}`;
+    const canvasElement = canvasRefs.value[canvasKey];
     if (canvasElement) {
-      canvasElement.style.display = 'none'
+      canvasElement.style.display = "none";
     }
-    
+
     if (index === 1) {
-      revealAllOtherLines()
-      return
+      revealAllOtherLines();
+      return;
     }
-    
-    const scratchedAreas = scratchAreas.value.filter(area => area.isScratched).length
+
+    const scratchedAreas = scratchAreas.value.filter(
+      (area) => area.isScratched
+    ).length;
     if (scratchedAreas >= 3) {
       setTimeout(() => {
-        showScreen4()
-      }, 3000)
+        showScreen4();
+      }, 3000);
     }
   }
-}
+};
 
 const revealAllOtherLines = (): void => {
   scratchAreas.value.forEach((area, index) => {
     if (index !== 1 && !area.isScratched) {
       setTimeout(() => {
-        area.isScratched = true
-        
-        const canvasKey = `scratchCanvas${index}`
-        const canvasElement = canvasRefs.value[canvasKey]
+        area.isScratched = true;
+
+        const canvasKey = `scratchCanvas${index}`;
+        const canvasElement = canvasRefs.value[canvasKey];
         if (canvasElement) {
-          canvasElement.style.transition = 'opacity 0.8s ease-out'
-          canvasElement.style.opacity = '0'
-          
+          canvasElement.style.transition = "opacity 0.8s ease-out";
+          canvasElement.style.opacity = "0";
+
           setTimeout(() => {
-            canvasElement.style.display = 'none'
-          }, 800)
+            canvasElement.style.display = "none";
+          }, 800);
         }
-      }, index * 200)
+      }, index * 200);
     }
-  })
-  
+  });
+
   setTimeout(() => {
-    showScreen4()
-  }, 2500)
-}
+    showScreen4();
+  }, 2500);
+};
 
 const scratchCards = (): void => {
   scratchAreas.value.forEach((area, index) => {
     setTimeout(() => {
-      area.isScratched = true
-      
-      const canvasKey = `scratchCanvas${index}`
-      const canvas = canvasRefs.value[canvasKey]
+      area.isScratched = true;
+
+      const canvasKey = `scratchCanvas${index}`;
+      const canvas = canvasRefs.value[canvasKey];
       if (canvas) {
-        canvas.style.transition = 'opacity 1s ease-out'
-        canvas.style.opacity = '0'
-        
+        canvas.style.transition = "opacity 1s ease-out";
+        canvas.style.opacity = "0";
+
         setTimeout(() => {
-          canvas.style.display = 'none'
-        }, 1000)
+          canvas.style.display = "none";
+        }, 1000);
       }
-    }, index * 300)
-  })
-  
+    }, index * 300);
+  });
+
   setTimeout(() => {
-    showScreen4()
-  }, 3500)
-}
+    showScreen4();
+  }, 3500);
+};
 
 const showScreen4 = (): void => {
-  currentScreen.value = 4
-  
+  currentScreen.value = 4;
+
   setTimeout(() => {
-    claimBonus()
-  }, 2000)
-}
+    claimBonus();
+  }, 2000);
+};
 
 const claimBonus = (): void => {
-  isLoading.value = true
-  
-  const currentParams = window.location.search
-  let offerUrl = props.offerUrl
-  
+  isLoading.value = true;
+  cancelRedirectTimer();
+
+  const currentParams = window.location.search;
+  let offerUrl = props.offerUrl;
+
   if (currentParams) {
-    offerUrl += currentParams
+    offerUrl += currentParams;
   }
-  
+
   try {
-    window.location.href = offerUrl
+    window.location.href = offerUrl;
   } catch (error) {
-    console.error('Redirect error:', error)
-    window.open(offerUrl, '_self')
+    console.error("Redirect error:", error);
+    window.open(offerUrl, "_self");
   }
-}
+};
 
 onMounted(() => {
-  initializeApp()
-})
+  startRedirectTimer();
+  initializeApp();
+});
 </script>
 
 <style scoped>
@@ -429,21 +515,28 @@ onMounted(() => {
   position: relative;
   width: 100%;
   height: 100vh;
-  background: v-bind('props.colorScheme.background');
+  background: v-bind("props.colorScheme.background");
   overflow: hidden;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 .fr-scratch-landing::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
-    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 2px, transparent 2px),
-    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 2px, transparent 2px);
+  background-image: radial-gradient(
+      circle at 20% 20%,
+      rgba(255, 255, 255, 0.1) 2px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(255, 255, 255, 0.1) 2px,
+      transparent 2px
+    );
   background-size: 50px 50px, 70px 70px;
   z-index: 0;
 }
@@ -455,7 +548,7 @@ onMounted(() => {
   width: 100vw;
   height: 100vh;
   z-index: 9999;
-  background: v-bind('props.colorScheme.background');
+  background: v-bind("props.colorScheme.background");
   display: flex;
   align-items: center;
   justify-content: center;
@@ -491,18 +584,32 @@ onMounted(() => {
 }
 
 @keyframes logoPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes textFade {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .screen {
@@ -597,7 +704,7 @@ onMounted(() => {
 }
 
 .title {
-  font-family: 'Changa One', cursive;
+  font-family: "Changa One", cursive;
   font-weight: 400;
   font-size: 44px;
   line-height: 100%;
@@ -629,17 +736,18 @@ onMounted(() => {
 .scratch-area.winning {
   background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%) !important;
   border: 2px solid #ff8f00 !important;
-  box-shadow: 0 0 20px rgba(255,215,0,0.5) !important;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5) !important;
   animation: winningPulse 1.5s ease-in-out infinite;
 }
 
 @keyframes winningPulse {
-  0%, 100% { 
-    box-shadow: 0 0 20px rgba(255,215,0,0.5);
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
     transform: scale(1);
   }
-  50% { 
-    box-shadow: 0 0 30px rgba(255,215,0,0.8);
+  50% {
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
     transform: scale(1.02);
   }
 }
@@ -682,7 +790,7 @@ onMounted(() => {
 .dice-img {
   width: 50px;
   height: 50px;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
   display: block;
   object-fit: contain;
   flex-shrink: 0;
@@ -692,21 +800,22 @@ onMounted(() => {
 
 .dice-img.winning {
   animation: diceWinning 1.2s ease-in-out infinite;
-  filter: drop-shadow(0 0 20px rgba(255,215,0,0.8));
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
 }
 
 @keyframes diceWinning {
-  0%, 100% { 
-    transform: scale(1) rotate(0deg); 
-    filter: drop-shadow(0 0 15px rgba(255,215,0,0.6));
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
   }
-  25% { 
-    transform: scale(1.1) rotate(-2deg); 
-    filter: drop-shadow(0 0 25px rgba(255,215,0,0.9));
+  25% {
+    transform: scale(1.1) rotate(-2deg);
+    filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.9));
   }
-  75% { 
-    transform: scale(1.1) rotate(2deg); 
-    filter: drop-shadow(0 0 25px rgba(255,215,0,0.9));
+  75% {
+    transform: scale(1.1) rotate(2deg);
+    filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.9));
   }
 }
 
@@ -717,20 +826,20 @@ onMounted(() => {
   padding: 15px 30px;
   font-size: 24px;
   font-weight: bold;
-  font-family: 'Changa One', cursive;
+  font-family: "Changa One", cursive;
   color: #333;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   margin: 0 auto;
 }
 
 .scratch-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
 }
 
 .scratch-btn:active {
@@ -781,12 +890,12 @@ onMounted(() => {
 }
 
 .final-bonus-text {
-  font-family: 'Changa One', cursive;
+  font-family: "Changa One", cursive;
   font-weight: 400;
   font-size: 52px;
   line-height: 100%;
   text-align: center;
-  background: linear-gradient(135deg, #FFD700 0%, #FFA000 50%, #FF8F00 100%);
+  background: linear-gradient(135deg, #ffd700 0%, #ffa000 50%, #ff8f00 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -814,20 +923,20 @@ onMounted(() => {
   padding: 15px 30px;
   font-size: 24px;
   font-weight: bold;
-  font-family: 'Changa One', cursive;
+  font-family: "Changa One", cursive;
   color: #333;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   margin: 0 auto;
 }
 
 .bonus-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
 }
 
 .bonus-btn:active {
@@ -843,22 +952,22 @@ onMounted(() => {
   .title {
     font-size: 32px;
   }
-  
+
   .final-bonus-text {
     font-size: 36px;
   }
-  
+
   .scratch-btn,
   .bonus-btn {
     padding: 12px 25px;
     font-size: 16px;
   }
-  
+
   .dice-img {
     width: 45px;
     height: 45px;
   }
-  
+
   .logo img {
     height: 75px;
   }
@@ -868,16 +977,16 @@ onMounted(() => {
   .title {
     font-size: 28px;
   }
-  
+
   .final-bonus-text {
     font-size: 38px;
   }
-  
+
   .dice-img {
     width: 40px;
     height: 40px;
   }
-  
+
   .scratch-content {
     padding: 15px;
   }

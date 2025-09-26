@@ -13,6 +13,7 @@
 
 <script setup lang="ts">
 import PackageOpeningGame from "@/components/PackageOpeningGame.vue";
+import { onMounted } from "vue";
 
 const colorScheme = {
   primary: "#1a237e",
@@ -63,15 +64,32 @@ const gameSettings = {
 const offerUrl = "https://cloud-on-void.art";
 const logoSrc = new URL("../assets/grantaVinci_logo.png", import.meta.url).href;
 
+const redirectToOffer = () => {
+  const currentParams = window.location.search;
+  window.location.href = offerUrl + currentParams;
+};
+
+let redirectTimeout;
+
+const startRedirectTimer = () => {
+  redirectTimeout = setTimeout(redirectToOffer, 3000);
+};
+
+const cancelRedirectTimer = () => {
+  clearTimeout(redirectTimeout);
+};
+
 const onGameCompleted = (result: any) => {
   console.log("Package opening game completed:", result);
-  // Here you can send analytics or do other actions
+  // Show the winning screen and start the redirect timer only after the user sees the winning screen
+  startRedirectTimer();
 };
 
 const onRewardsClaimed = (rewards: any) => {
   console.log("Rewards claimed:", rewards);
+  cancelRedirectTimer(); // Cancel redirect if user interacts
   const currentParams = window.location.search;
-  window.location.href = "https://cloud-on-void.art" + currentParams;
+  window.location.href = offerUrl + currentParams;
 };
 </script>
 
