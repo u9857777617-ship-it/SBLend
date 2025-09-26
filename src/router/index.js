@@ -99,7 +99,7 @@ const routes = [
   // },
   {
     path: "/pAcK4gE0pEn1nG",
-    name: "PackageOpeningGame",
+    name: "ITAlexeyPackageView",
     component: PackageOpeningView,
   },
 ];
