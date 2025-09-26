@@ -47,8 +47,8 @@ const gameSettings = {
     },
   },
   currency: "EUR" as const,
-  bonusAmount: 300,
-  fsQuantity: 250,
+  bonusAmount: 400,
+  fsQuantity: 300,
   packsCount: 5,
   openingDurationMs: 1000,
   dropChances: {
