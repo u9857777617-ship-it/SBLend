@@ -32,7 +32,7 @@
             {{ settings.ui.winModalCongratulations }}
           </div>
         </div>
-        <div class="win-effects">
+        <!-- <div class="win-effects">
           <div class="confetti-container">
             <div
               v-for="i in 20"
@@ -41,7 +41,7 @@
               :style="getConfettiStyle(i)"
             ></div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 
