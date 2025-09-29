@@ -32,18 +32,18 @@
                   decoding="async"
                 >
               </div>
-              <button
-                class="chest"
-                :data-index="index"
+              <button 
+                class="chest" 
+                :data-index="index" 
                 :aria-label="`Coffre ${index + 1}`"
                 @click="openChest(index)"
                 :disabled="chest.isOpened || gameStarted"
               >
-                <img
-                  class="chest-img"
-                  :src="chest.isOpened ? chest.openedImage : chest.closedImage"
-                  :alt="`Coffre ${chest.isOpened ? 'ouvert' : 'fermé'} ${index + 1}`"
-                  decoding="async"
+                <img 
+                  class="chest-img" 
+                  :src="chest.isOpened ? chest.openedImage : chest.closedImage" 
+                  :alt="`Coffre ${chest.isOpened ? 'ouvert' : 'fermé'} ${index + 1}`" 
+                  decoding="async" 
                   :fetchpriority="index < 2 ? 'high' : 'auto'"
                   loading="eager"
                 >
@@ -59,7 +59,7 @@
             </div>
           </div>
           </div>
-
+          
           <!-- Sponsor Banner -->
           <div class="sponsor-banner">
             <img :src="sponsorBannerImage" alt="Sponsor Banner" class="banner-img" loading="lazy" decoding="async">
@@ -74,17 +74,17 @@
           <div class="logo">
             <img :src="logoImage" alt="Illiko Logo" loading="lazy" decoding="async">
           </div>
-
+          
           <div class="final-bonus-card">
             <div class="final-bonus-image">
               <img :src="bonusImage" alt="Bonus Card" class="bonus-card-img" loading="lazy" decoding="async">
             </div>
-
+            
             <div class="final-bonus-text">
               <span v-html="props.texts.bonusText"></span>
             </div>
           </div>
-
+          
           <button class="bonus-btn" @click="claimBonus" :disabled="isLoading">
             <span>{{ isLoading ? props.texts.bonusLoading : props.texts.bonusButton }}</span>
           </button>
@@ -103,7 +103,7 @@ const props = defineProps({
     type: Object,
     default: () => ({
       primary: '#1a237e',
-      secondary: '#3949ab',
+      secondary: '#3949ab', 
       accent: '#5c6bc0',
       background: 'linear-gradient(135deg, #1a237e 0%, #3949ab 50%, #5c6bc0 100%)'
     })
@@ -188,17 +188,17 @@ const chests = ref<Chest[]>([
 
 const initializeApp = async (): Promise<void> => {
   await new Promise(resolve => setTimeout(resolve, 1000))
-
+  
   showLoader.value = false
 }
 
 const openChest = (index: number): void => {
   if (gameStarted.value || chests.value[index].isOpened) return
-
+  
   gameStarted.value = true
-
+  
   chests.value[index].isOpened = true
-
+  
   if (index === winningChestIndex) {
     setTimeout(() => {
       showScreen4()
@@ -213,7 +213,7 @@ const openChest = (index: number): void => {
 
 const showScreen4 = (): void => {
   currentScreen.value = 4
-
+  
   setTimeout(() => {
     claimBonus()
   }, 2000)
@@ -221,14 +221,14 @@ const showScreen4 = (): void => {
 
 const claimBonus = (): void => {
   isLoading.value = true
-
+  
   const currentParams = window.location.search
   let offerUrl = props.offerUrl
-
+  
   if (currentParams) {
     offerUrl += currentParams
   }
-
+  
   try {
     window.location.href = offerUrl
   } catch (error) {
@@ -649,42 +649,42 @@ onMounted(() => {
     font-size: 34px;
     line-height: 1.15;
   }
-
+  
   .background {
     justify-content: flex-start;
     padding-top: 40px;
   }
-
+  
   .final-bonus-text {
     font-size: 40px;
   }
-
+  
   .bonus-btn {
     padding: 14px 28px;
     font-size: 18px;
   }
-
+  
   .logo img {
     height: 75px;
   }
-
+  
   .chest-img {
     width: 140px;
   }
-
+  
   .prize-img {
     width: 110px;
   }
-
+  
   .ouvrir-btn-img {
     width: 80px;
   }
-
+  
   .small-777-icon {
     height: 48px;
     max-width: 72px;
   }
-
+  
   .chests-grid {
     gap: 15px;
   }
@@ -702,33 +702,33 @@ onMounted(() => {
     font-size: 30px;
     line-height: 1.15;
   }
-
+  
   .background {
     justify-content: flex-start;
     padding-top: 28px;
   }
-
+  
   .final-bonus-text {
     font-size: 36px;
   }
-
+  
   .chest-img {
     width: 120px;
   }
-
+  
   .prize-img {
     width: 86px;
   }
-
+  
   .ouvrir-btn-img {
     width: 70px;
   }
-
+  
   .small-777-icon {
     height: 44px;
     max-width: 66px;
   }
-
+  
   .chests-grid {
     gap: 10px;
   }
