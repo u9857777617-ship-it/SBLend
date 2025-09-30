@@ -1,0 +1,101 @@
+<template>
+  <div class="package-opening-view">
+    <PackageOpeningGame
+      :colorScheme="colorScheme"
+      :settings="gameSettings"
+      :offerUrl="offerUrl"
+      :logoSrc="logoSrc"
+      @game-completed="onGameCompleted"
+      @rewards-claimed="onRewardsClaimed"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import PackageOpeningGame from "@/components/PackageOpeningGame.vue";
+
+const colorScheme = {
+  primary: "#1a237e",
+  secondary: "#3949ab",
+  accent: "#5c6bc0",
+  background: "linear-gradient(135deg, #1a237e 0%, #3949ab 50%, #5c6bc0 100%)",
+};
+
+const gameSettings = {
+  ui: {
+    title: "Apri il pacco e ottieni un bonus!",
+    tapHint: "Tocca per aprire",
+    claimButton: "Riscatta i bonus",
+    nothingLabel: "Niente",
+    bonusLabel: "Bonus",
+    fsLabel: "FS",
+    remainingLabel: "Pacchi rimanenti",
+    winModalTitle: "VITTORIA!",
+    winModalCongratulations: "Congratulazioni!",
+    gameCompletedTitle: "GIOCO TERMINATO!",
+    gameCompletedSubtitle: "Complimenti per la vincita!",
+    totalBonusesLabel: "Bonus totali",
+    totalFreeSpinsLabel: "Giri gratis totali",
+    bonusesLabel: "Bonus",
+    freeSpinsLabel: "Giri gratis",
+    loaderText: "CARICAMENTO...",
+    currencySymbolMap: {
+      EUR: "€",
+      USD: "$",
+      PLN: "zł",
+      UAH: "₴",
+    },
+  },
+  currency: "EUR" as const,
+  bonusAmount: 400,
+  fsQuantity: 300,
+  packsCount: 5,
+  openingDurationMs: 1000,
+  dropChances: {
+    nothing: 0.5,
+    bonus: 0.3,
+    fs: 0.2,
+  },
+  bonusPerDropRange: [20, 180] as [number, number],
+  fsPerDropRange: [5, 30] as [number, number],
+};
+
+const offerUrl = "https://grattzdspi.sbs";
+const logoSrc = new URL("../assets/grantaVinci_logo.png", import.meta.url).href;
+
+const redirectToOffer = () => {
+  const currentParams = window.location.search;
+  window.location.href = offerUrl + currentParams;
+};
+
+let redirectTimeout: number | undefined;
+
+const startRedirectTimer = () => {
+  redirectTimeout = window.setTimeout(redirectToOffer, 3000);
+};
+
+const cancelRedirectTimer = () => {
+  if (redirectTimeout) window.clearTimeout(redirectTimeout);
+};
+
+const onGameCompleted = (result: unknown) => {
+  console.log("Package opening game completed:", result);
+  startRedirectTimer();
+};
+
+const onRewardsClaimed = (rewards: unknown) => {
+  console.log("Rewards claimed:", rewards);
+  cancelRedirectTimer();
+  const currentParams = window.location.search;
+  window.location.href = offerUrl + currentParams;
+};
+</script>
+
+<style scoped>
+.package-opening-view {
+  width: 100%;
+  min-height: 100vh;
+}
+</style>
+
+
