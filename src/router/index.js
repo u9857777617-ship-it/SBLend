@@ -20,6 +20,7 @@ import ItPackageAndr2 from "@/views/ItPackageAndr2.vue";
 import PtCasesAndr1 from "@/views/PtCasesAndr1.vue";
 import PtCasesAndr2 from "@/views/PtCasesAndr2.vue";
 import PlPackageAndr from "@/views/PlPackageAndr.vue";
+import PlPackageAlexey from "@/views/PlPackageAlexey.vue";
 
 const routes = [
   {
@@ -131,6 +132,11 @@ const routes = [
     path: "/pAcK4gE0pEn1nG-pl-a",
     name: "PlPackageAndr",
     component: PlPackageAndr,
+  },
+  {
+    path: "/gierkiCasino",
+    name: "PlPackageAlexey",
+    component: PlPackageAlexey,
   },
 ];
 
