@@ -15,13 +15,13 @@ import PtCasesPhantom from '@/views/PtCasesPhantom.vue'
 import PtCasesKozak from '@/views/PtCasesKozak.vue'
 import PackageOpeningView from '@/views/ITAlexeyPackageView.vue'
 import PlPackageKozak from '@/views/PlPackageKozak.vue'
-import ItPackageGordey from "@/views/ItPackageGordey.vue";
-import ItPackageAndr1 from "@/views/ItPackageAndr1.vue";
-import ItPackageAndr2 from '@/views/ItPackageAndr2.vue";
-import PtCasesAndr1 from "@/views/PtCasesAndr1.vue";
-import PtCasesAndr2 from "@/views/PtCasesAndr2.vue";
-import PlPackageAndr from "@/views/PlPackageAndr.vue";
-import PlPackageAlexey from "@/views/PlPackageAlexey.vue'
+import ItPackageGordey from '@/views/ItPackageGordey.vue'
+import ItPackageAndr1 from '@/views/ItPackageAndr1.vue'
+import ItPackageAndr2 from '@/views/ItPackageAndr2.vue'
+import PtCasesAndr1 from '@/views/PtCasesAndr1.vue'
+import PtCasesAndr2 from '@/views/PtCasesAndr2.vue'
+import PlPackageAndr from '@/views/PlPackageAndr.vue'
+import PlPackageAlexey from '@/views/PlPackageAlexey.vue'
 import PackageOpeningView2 from '@/views/PackageOpeningView2.vue'
 import PackageOpeningView3 from '@/views/PackageOpeningView3.vue'
 
@@ -94,7 +94,7 @@ const routes = [
   },
   {
     path: '/pBo5tHm4-it',
-    name: 'ItCasesGGG',
+    name: 'ItCasesYura',
     component: ItCasesPhantom2,
   },
   {
@@ -108,48 +108,48 @@ const routes = [
     component: PackageOpeningView,
   },
   {
-    path: "/pAcK4gE0pEn1nG-pl",
-    name: "PlPackageKozak",
+    path: '/pAcK4gE0pEn1nG-pl',
+    name: 'PlPackageKozak',
     component: PlPackageKozak,
   },
   {
-    path: "/pAcK4gE0pEn1nG-it-gordey",
-    name: "ItPackageGordey",
+    path: '/pAcK4gE0pEn1nG-it-gordey',
+    name: 'ItPackageGordey',
     component: ItPackageGordey,
   },
   {
-    path: "/pAcK4gE0pEn1nG-it-a1",
-    name: "ItPackageAndr1",
+    path: '/pAcK4gE0pEn1nG-it-a1',
+    name: 'ItPackageAndr1',
     component: ItPackageAndr1,
   },
   {
-    path: "/pAcK4gE0pEn1nG-it-a2",
-    name: "ItPackageAndr2",
+    path: '/pAcK4gE0pEn1nG-it-a2',
+    name: 'ItPackageAndr2',
     component: ItPackageAndr2,
   },
   {
-    path: "/GKx2bOz7-pt-a1",
-    name: "PtCasesAndr1",
+    path: '/GKx2bOz7-pt-a1',
+    name: 'PtCasesAndr1',
     component: PtCasesAndr1,
   },
   {
-    path: "/GKx2bOz7-pt-a2",
-    name: "PtCasesAndr2",
+    path: '/GKx2bOz7-pt-a2',
+    name: 'PtCasesAndr2',
     component: PtCasesAndr2,
   },
   {
-    path: "/pAcK4gE0pEn1nG-pl-a",
-    name: "PlPackageAndr",
+    path: '/pAcK4gE0pEn1nG-pl-a',
+    name: 'PlPackageAndr',
     component: PlPackageAndr,
   },
   {
-    path: "/gierkiCasino",
-    name: "PlPackageAlexey",
+    path: '/gierkiCasino',
+    name: 'PlPackageAlexey',
     component: PlPackageAlexey,
   },
   {
     path: '/pAcK4gE0pEn2nG',
-    name: 'PackageOpeningGGG',
+    name: 'PackageOpeningYura',
     component: PackageOpeningView2,
   },
   {
@@ -157,7 +157,7 @@ const routes = [
     name: 'PackageOpeningPhantom',
     component: PackageOpeningView3,
   }
-];
+]
 
 const router = createRouter({
   history: createWebHistory(),
