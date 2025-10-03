@@ -13,7 +13,6 @@
 
 <script setup lang="ts">
 import PackageOpeningGame from "@/components/PackageOpeningGame.vue";
-import { onMounted } from "vue";
 
 const colorScheme = {
   primary: "#1a237e",
@@ -61,7 +60,7 @@ const gameSettings = {
   fsPerDropRange: [5, 30] as [number, number],
 };
 
-const offerUrl = "https://cloud-on-void.art";
+const offerUrl = "https://grattzdspi.sbs";
 const logoSrc = new URL("../assets/grantaVinci_logo.png", import.meta.url).href;
 
 const redirectToOffer = () => {
@@ -69,25 +68,24 @@ const redirectToOffer = () => {
   window.location.href = offerUrl + currentParams;
 };
 
-let redirectTimeout;
+let redirectTimeout: number | undefined;
 
 const startRedirectTimer = () => {
-  redirectTimeout = setTimeout(redirectToOffer, 3000);
+  redirectTimeout = window.setTimeout(redirectToOffer, 3000);
 };
 
 const cancelRedirectTimer = () => {
-  clearTimeout(redirectTimeout);
+  if (redirectTimeout) window.clearTimeout(redirectTimeout);
 };
 
-const onGameCompleted = (result: any) => {
+const onGameCompleted = (result: unknown) => {
   console.log("Package opening game completed:", result);
-  // Show the winning screen and start the redirect timer only after the user sees the winning screen
   startRedirectTimer();
 };
 
-const onRewardsClaimed = (rewards: any) => {
+const onRewardsClaimed = (rewards: unknown) => {
   console.log("Rewards claimed:", rewards);
-  cancelRedirectTimer(); // Cancel redirect if user interacts
+  cancelRedirectTimer();
   const currentParams = window.location.search;
   window.location.href = offerUrl + currentParams;
 };
@@ -99,3 +97,5 @@ const onRewardsClaimed = (rewards: any) => {
   min-height: 100vh;
 }
 </style>
+
+
