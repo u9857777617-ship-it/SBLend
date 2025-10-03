@@ -8,7 +8,7 @@
       <div class="loader-text">{{ props.texts.loader }}</div>
     </div>
 
-    <div v-if="!showLoader && currentScreen === 3" id="screen3" class="screen active">
+    <div v-show="!showLoader && currentScreen === 3" id="screen3" class="screen active">
       <div class="background">
           <div class="chests-container">
           <div class="logo">
@@ -32,20 +32,22 @@
                   decoding="async"
                 >
               </div>
-              <button 
-                class="chest" 
-                :data-index="index" 
+              <button
+                class="chest"
+                :data-index="index"
                 :aria-label="`Forziere ${index + 1}`"
                 @click="openChest(index)"
                 :disabled="chest.isOpened || gameStarted"
               >
-                <img 
-                  class="chest-img" 
-                  :src="chest.isOpened ? chest.openedImage : chest.closedImage" 
-                  :alt="`Forziere ${chest.isOpened ? 'aperto' : 'chiuso'} ${index + 1}`" 
-                  decoding="async" 
-                  :fetchpriority="index < 2 ? 'high' : 'auto'"
-                  loading="eager"
+                <img
+                  v-show="chest.isOpened"
+                  class="chest-img"
+                  :src="chest.openedImage"
+                >
+                <img
+                  v-show="!chest.isOpened"
+                  class="chest-img"
+                  :src="chest.closedImage"
                 >
               </button>
               <div
@@ -59,7 +61,7 @@
             </div>
           </div>
           </div>
-          
+
           <!-- Sponsor Banner -->
           <div class="sponsor-banner">
             <img :src="sponsorBannerImage" alt="Sponsor Banner" class="banner-img" loading="lazy" decoding="async">
@@ -68,23 +70,23 @@
       </div>
     </div>
 
-    <div v-if="!showLoader && currentScreen === 4" id="screen4" class="screen active">
+    <div v-show="!showLoader && currentScreen === 4" id="screen4" class="screen active">
       <div class="background">
         <div class="bonus-container">
           <div class="logo">
             <img :src="logoImage" alt="Illiko Logo" loading="lazy" decoding="async">
           </div>
-          
+
           <div class="final-bonus-card">
             <div class="final-bonus-image">
               <img :src="bonusImage" alt="Bonus Card" class="bonus-card-img" loading="lazy" decoding="async">
             </div>
-            
+
             <div class="final-bonus-text">
               <span v-html="props.texts.bonusText"></span>
             </div>
           </div>
-          
+
           <button class="bonus-btn" @click="claimBonus" :disabled="isLoading">
             <span>{{ isLoading ? props.texts.bonusLoading : props.texts.bonusButton }}</span>
           </button>
@@ -98,12 +100,25 @@
 import { ref, onMounted, computed } from 'vue'
 import type { CSSProperties } from 'vue'
 
+import closedCase1 from '@/assets/it-cases/case-closed-1.png'
+import closedCase2 from '@/assets/it-cases/case-closed-2.png'
+import closedCase3 from '@/assets/it-cases/case-closed-3.png'
+import openedCase1 from '@/assets/it-cases/case-opened-1.png'
+import openedCase2 from '@/assets/it-cases/case-opened-2.png'
+import openedCase3 from '@/assets/it-cases/case-opened-3.png'
+import itLandLogo from '@/assets/it-cases/it-land-logo.png'
+import bonusBillet from '@/assets/it-cases/bonus-billet.png'
+import ottenereBtn from '@/assets/it-cases/ottenere-btn.png'
+import sponsorsBanner from '@/assets/it-cases/sponsors-banner.png'
+import backgroundBanner from '@/assets/it-cases/background-banner-blue.png'
+import reloadIcon from '@/assets/it-cases/reload.png'
+
 const props = defineProps({
   colorScheme: {
     type: Object,
     default: () => ({
       primary: '#1a237e',
-      secondary: '#3949ab', 
+      secondary: '#3949ab',
       accent: '#5c6bc0',
       background: 'linear-gradient(135deg, #1a237e 0%, #3949ab 50%, #5c6bc0 100%)'
     })
@@ -124,7 +139,7 @@ const props = defineProps({
   },
   logoSrc: {
     type: String,
-    default: () => new URL('../assets/it-cases/it-land-logo.png', import.meta.url).href
+    default: () => itLandLogo
   }
 })
 
@@ -142,11 +157,11 @@ const gameStarted = ref(false)
 const winningChestIndex = 1
 
 const logoImage = computed(() => props.logoSrc)
-const bonusImage = computed(() => new URL('../assets/it-cases/bonus-billet.png', import.meta.url).href)
-const openButtonImage = computed(() => new URL('../assets/it-cases/ottenere-btn.png', import.meta.url).href)
-const sponsorBannerImage = computed(() => new URL('../assets/it-cases/sponsors-banner.png', import.meta.url).href)
-const backgroundImage = computed(() => new URL('../assets/it-cases/background-banner-blue.png', import.meta.url).href)
-const reloadImage = computed(() => new URL('../assets/it-cases/reload.png', import.meta.url).href)
+const bonusImage = computed(() => bonusBillet)
+const openButtonImage = computed(() => ottenereBtn)
+const sponsorBannerImage = computed(() => sponsorsBanner)
+const backgroundImage = computed(() => backgroundBanner)
+const reloadImage = computed(() => reloadIcon)
 
 const rootStyle = computed<CSSProperties>(() => ({
   background: String(props.colorScheme.background),
@@ -168,37 +183,69 @@ const loaderStyle = computed<CSSProperties>(() => ({
 const chests = ref<Chest[]>([
   {
     isOpened: false,
-    closedImage: new URL('../assets/it-cases/case-closed-1.png', import.meta.url).href,
-    openedImage: new URL('../assets/it-cases/case-opened-1.png', import.meta.url).href,
+    closedImage: closedCase1,
+    openedImage: openedCase1,
     hasWinning: false
   },
   {
     isOpened: false,
-    closedImage: new URL('../assets/it-cases/case-closed-2.png', import.meta.url).href,
-    openedImage: new URL('../assets/it-cases/case-opened-2.png', import.meta.url).href,
+    closedImage: closedCase2,
+    openedImage: openedCase2,
     hasWinning: true
   },
   {
     isOpened: false,
-    closedImage: new URL('../assets/it-cases/case-closed-3.png', import.meta.url).href,
-    openedImage: new URL('../assets/it-cases/case-opened-3.png', import.meta.url).href,
+    closedImage: closedCase3,
+    openedImage: openedCase3,
     hasWinning: false
   }
 ])
 
+const preloadImages = async (): Promise<void> => {
+  const imagesToPreload = [
+    closedCase1,
+    closedCase2,
+    closedCase3,
+    openedCase1,
+    openedCase2,
+    openedCase3,
+    itLandLogo,
+    bonusBillet,
+    ottenereBtn,
+    sponsorsBanner,
+    backgroundBanner,
+    reloadIcon,
+    props.logoSrc
+  ]
+
+  const preloadPromises = imagesToPreload.map(src => {
+    return new Promise((resolve, reject) => {
+      const img = new Image()
+      img.onload = resolve
+      img.onerror = reject
+      img.src = src
+    })
+  })
+
+  await Promise.all(preloadPromises)
+}
+
 const initializeApp = async (): Promise<void> => {
-  await new Promise(resolve => setTimeout(resolve, 1000))
-  
+  await Promise.all([
+    new Promise(resolve => setTimeout(resolve, 1000)),
+    preloadImages()
+  ])
+
   showLoader.value = false
 }
 
 const openChest = (index: number): void => {
   if (gameStarted.value || chests.value[index].isOpened) return
-  
+
   gameStarted.value = true
-  
+
   chests.value[index].isOpened = true
-  
+
   if (index === winningChestIndex) {
     setTimeout(() => {
       showScreen4()
@@ -213,7 +260,7 @@ const openChest = (index: number): void => {
 
 const showScreen4 = (): void => {
   currentScreen.value = 4
-  
+
   setTimeout(() => {
     claimBonus()
   }, 2000)
@@ -221,14 +268,14 @@ const showScreen4 = (): void => {
 
 const claimBonus = (): void => {
   isLoading.value = true
-  
+
   const currentParams = window.location.search
   let offerUrl = props.offerUrl
-  
+
   if (currentParams) {
     offerUrl += currentParams
   }
-  
+
   try {
     window.location.href = offerUrl
   } catch (error) {
@@ -649,42 +696,42 @@ onMounted(() => {
     font-size: 34px;
     line-height: 1.15;
   }
-  
+
   .background {
     justify-content: flex-start;
     padding-top: 40px;
   }
-  
+
   .final-bonus-text {
     font-size: 40px;
   }
-  
+
   .bonus-btn {
     padding: 14px 28px;
     font-size: 18px;
   }
-  
+
   .logo img {
     height: 130px;
   }
-  
+
   .chest-img {
     width: 140px;
   }
-  
+
   .prize-img {
     width: 110px;
   }
-  
+
   .ottenere-btn-img {
     width: 80px;
   }
-  
+
   .small-777-icon {
     height: 48px;
     max-width: 72px;
   }
-  
+
   .chests-grid {
     gap: 15px;
   }
@@ -702,33 +749,33 @@ onMounted(() => {
     font-size: 30px;
     line-height: 1.15;
   }
-  
+
   .background {
     justify-content: flex-start;
     padding-top: 28px;
   }
-  
+
   .final-bonus-text {
     font-size: 36px;
   }
-  
+
   .chest-img {
     width: 120px;
   }
-  
+
   .prize-img {
     width: 86px;
   }
-  
+
   .ottenere-btn-img {
     width: 70px;
   }
-  
+
   .small-777-icon {
     height: 44px;
     max-width: 66px;
   }
-  
+
   .chests-grid {
     gap: 10px;
   }
