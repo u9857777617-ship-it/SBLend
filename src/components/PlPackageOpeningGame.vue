@@ -181,7 +181,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
-import type { CSSProperties } from "vue";
 
 type Currency = "EUR" | "USD" | "PLN" | "UAH";
 
@@ -297,40 +296,12 @@ const showWinModal = ref(false);
 const lastWinAmount = ref(0);
 const lastWinFs = ref(0);
 
-// Performance optimizations
-const isSlowDevice = ref(false);
-const imagesLoaded = ref(0);
-const totalImages = ref(2); // Logo + package images
-
 // Planned drops array - calculated once at game start
 const plannedDrops = ref<Drop[]>([]);
 
-// Debounced functions for better performance
-let openPackageTimeout: NodeJS.Timeout | null = null;
-let modalTimeout: NodeJS.Timeout | null = null;
-
 const emit = defineEmits(["game-completed", "rewards-claimed"]);
 
-const detectSlowDevice = (): boolean => {
-  // Check for slow device indicators
-  const connection =
-    (navigator as any).connection ||
-    (navigator as any).mozConnection ||
-    (navigator as any).webkitConnection;
-  const slowConnection =
-    connection &&
-    (connection.effectiveType === "slow-2g" ||
-      connection.effectiveType === "2g");
-  const lowMemory =
-    "memory" in performance &&
-    (performance as any).memory?.jsHeapSizeLimit < 1073741824; // Less than 1GB
-  const oldDevice =
-    navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
-
-  return !!(slowConnection || lowMemory || oldDevice);
-};
-
-const rootStyle = computed<CSSProperties>(() => ({
+const rootStyle = computed(() => ({
   background: String(props.colorScheme.background),
 }));
 
@@ -517,7 +488,6 @@ function distributeFinalAmounts(totalAmount: number, slots: number): number[] {
   for (let i = 0; i < slots; i++) {
     const slotsLeft = slots - i;
     const minForSlot = Math.floor(remaining / slotsLeft);
-    const maxForSlot = remaining - (slotsLeft - 1) * minForSlot;
 
     // For monotonic non-decreasing, use minimum for early slots
     const amount = i === slots - 1 ? remaining : minForSlot;
@@ -619,21 +589,6 @@ const claimRewards = (): void => {
 
 const closeWinModal = (): void => {
   showWinModal.value = false;
-};
-
-const getConfettiStyle = (index: number): CSSProperties => {
-  const colors = ["#FFD700", "#FF4500", "#1E90FF", "#32CD32", "#FF69B4"];
-  const color = colors[index % colors.length];
-  const left = `${Math.random() * 100}%`;
-  const animationDelay = `${Math.random() * 2}s`;
-  const animationDuration = `${Math.random() * 3 + 2}s`;
-
-  return {
-    backgroundColor: color,
-    left,
-    animationDelay,
-    animationDuration,
-  };
 };
 
 const onLogoLoad = (): void => {

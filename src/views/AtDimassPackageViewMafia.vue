@@ -13,15 +13,9 @@
     </div>
   </template>
 
-
-
-  
-  <script setup lang="ts">
-  import { computed } from 'vue';
-  import PlPackageOpeningGame from '@/components/PlPackageOpeningGame.vue';
-
-
-  // AT (Austria) assets
+<script setup lang="ts">
+import { computed } from 'vue';
+import PlPackageOpeningGame from '@/components/PlPackageOpeningGame.vue';
 import atLogo from "@/assets/at-package/at_lotterein_logo.webp"; // logo img
 import atClosed from "@/assets/at-package/at_closed_package.webp"; // closed img
 import atOpened from "@/assets/at-package/at_opened_package.webp"; // opened img
@@ -36,7 +30,7 @@ const resolvedClosed = computed(() => {
 const resolvedOpened = computed(() => {
   return atOpened;
 });
-  
+
   // Динамічний фон
   const colorScheme = computed(() => ({
     primary: '#8B0000',
@@ -44,7 +38,7 @@ const resolvedOpened = computed(() => {
     accent: '#FF6F00',
     background: 'linear-gradient(135deg, #8B0000 0%, #C21807 50%, #FF6F00 100%)',
   }));
-  
+
   // Налаштування гри
   const gameSettings = {
     ui: {
@@ -79,9 +73,9 @@ const resolvedOpened = computed(() => {
     bonusPerDropRange: [20, 180],
     fsPerDropRange: [5, 30],
   };
-  
+
   const offerUrl = 'https://universe-haze.live';
-  
+
   const onGameCompleted = (_r: any) => {};
   const onRewardsClaimed = (_r: any) => {};
   </script>

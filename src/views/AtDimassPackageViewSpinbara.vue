@@ -1,8 +1,15 @@
 <template>
   <div class="package-opening-view">
-    <PlPackageOpeningGame :colorScheme="colorScheme" :settings="gameSettings" :offerUrl="offerUrl"
-      :logoSrc="resolvedLogo" :packageClosedSrc="resolvedClosed" :packageOpenedSrc="resolvedOpened"
-      @game-completed="onGameCompleted" @rewards-claimed="onRewardsClaimed" />
+    <PlPackageOpeningGame
+      :colorScheme="colorScheme"
+      :settings="gameSettings"
+      :offerUrl="offerUrl"
+      :logoSrc="atLogo"
+      :packageClosedSrc="atClosed"
+      :packageOpenedSrc="atOpened"
+      @game-completed="onGameCompleted"
+      @rewards-claimed="onRewardsClaimed"
+    />
   </div>
 </template>
 
@@ -18,17 +25,6 @@ import PlPackageOpeningGame from '@/components/PlPackageOpeningGame.vue';
 import atLogo from "@/assets/at-package/at_lotterein_logo.webp"; // logo img
 import atClosed from "@/assets/at-package/at_closed_package.webp"; // closed img
 import atOpened from "@/assets/at-package/at_opened_package.webp"; // opened img
-
-
-const resolvedLogo = computed(() => {
-  return atLogo;
-});
-const resolvedClosed = computed(() => {
-  return atClosed;
-});
-const resolvedOpened = computed(() => {
-  return atOpened;
-});
 
 // Динамічний фон
 const colorScheme = computed(() => ({
