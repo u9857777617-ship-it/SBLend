@@ -1,6 +1,6 @@
 <template>
   <div class="pt-cases-andr1">
-    <PtCasesLanding :colorScheme="colorScheme" :texts="texts" :offerUrl="offerUrl" />
+    <PtCasesLanding :color-scheme="colorScheme" :texts="texts" :offer-url="offerUrl" />
   </div>
 </template>
 
@@ -32,5 +32,4 @@ const offerUrl = 'https://jogosblanko.sbs'
   overflow: hidden;
 }
 </style>
-
 

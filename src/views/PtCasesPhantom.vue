@@ -1,9 +1,9 @@
 <template>
   <div class="pt-cases-phantom">
     <PtCasesLanding
-      :colorScheme="colorScheme"
+      :color-scheme="colorScheme"
       :texts="texts"
-      :offerUrl="offerUrl"
+      :offer-url="offerUrl"
     />
   </div>
 </template>
