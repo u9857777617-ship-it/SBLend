@@ -1,10 +1,10 @@
 <template>
   <div class="it-cases-view">
     <ItCasesLanding 
-      :colorScheme="colorScheme"
+      :color-scheme="colorScheme"
       :texts="texts"
-      :offerUrl="offerUrl"
-      :logoSrc="logoSrc"
+      :offer-url="offerUrl"
+      :logo-src="logoSrc"
     />
   </div>
 </template>

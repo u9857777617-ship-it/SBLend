@@ -16,4 +16,3 @@ import FrScratchLanding from '@/components/FrScratchLanding.vue'
 }
 </style>
 
-
