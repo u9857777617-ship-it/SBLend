@@ -25,6 +25,7 @@ import PlPackageAlexey from "@/views/PlPackageAlexey.vue";
 import PackageOpeningView2 from "@/views/PackageOpeningView2.vue";
 import PackageOpeningView3 from "@/views/PackageOpeningView3.vue";
 import AtDimassPackageViewSpinbara from "@/views/AtDimassPackageViewSpinbara.vue";
+import AtDimassPackageViewMafia from "@/views/AtDimassPackageViewMafia.vue";
 
 const routes = [
   {
@@ -162,6 +163,11 @@ const routes = [
     path: "/packageATbonuSS",
     name: "AtDimassPackageViewSpinbara",
     component: AtDimassPackageViewSpinbara,
+  },
+  {
+    path: "/packageATbonuSSM2f1a",
+    name: "AtDimassPackageViewMafia",
+    component: AtDimassPackageViewMafia,
   },
 ];
 
