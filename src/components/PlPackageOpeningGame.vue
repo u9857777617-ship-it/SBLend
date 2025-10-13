@@ -272,6 +272,15 @@ const props = defineProps({
     default: () =>
       new URL("../assets/pl-package/loto-logo.png", import.meta.url).href,
   },
+  // New dynamic image props
+  packageClosedSrc: {
+    type: String,
+    default: "",
+  },
+  packageOpenedSrc: {
+    type: String,
+    default: "",
+  },
 });
 
 // State
@@ -332,11 +341,13 @@ const currencySymbol = computed(
 // Похоже, что файлы в ассетах названы наоборот, поэтому маппим их перекрёстно
 const packageClosedImage = computed(
   () =>
-    new URL("../assets/pl-package/opened-package.png", import.meta.url).href
+    props.packageClosedSrc ||
+    new URL("../assets/pl-package/opened-package.webp", import.meta.url).href
 );
 const packageOpenedImage = computed(
   () =>
-    new URL("../assets/pl-package/closed-package.png", import.meta.url).href
+    props.packageOpenedSrc ||
+    new URL("../assets/pl-package/closed-package.webp", import.meta.url).href
 );
 
 /**
@@ -776,8 +787,8 @@ onMounted(() => {
   font-weight: 800;
   margin-bottom: 10px;
   text-transform: uppercase;
-  color: #FBFF06;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  color: #fbff06;
+  fbff-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* Totals Badges (above progress counter) */
