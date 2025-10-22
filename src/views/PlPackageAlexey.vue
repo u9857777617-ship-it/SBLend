@@ -1,10 +1,12 @@
 <template>
-  <div class="pl-package-view">
+  <div class="package-opening-view">
     <PlPackageOpeningGame
-      :color-scheme="colorScheme"
-      :settings="settings"
-      :offer-url="offerUrl"
-      :logo-src="logoSrc"
+      :colorScheme="colorScheme"
+      :settings="gameSettings"
+      :offerUrl="offerUrl"
+      :logoSrc="plLogo"
+      :packageClosedSrc="plClosed"
+      :packageOpenedSrc="plOpened"
       @game-completed="onGameCompleted"
       @rewards-claimed="onRewardsClaimed"
     />
@@ -12,21 +14,28 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import PlPackageOpeningGame from "../components/PlPackageOpeningGame.vue";
+import { computed } from "vue";
+import PlPackageOpeningGame from "@/components/PlPackageOpeningGame.vue";
 
-const colorScheme = ref({
-  primary: "#1a237e",
-  secondary: "#3949ab",
-  accent: "#5c6bc0",
-  background: "linear-gradient(135deg, #1a237e 0%, #3949ab 50%, #5c6bc0 100%)",
-});
+// 🇵🇱 PL (Poland) assets
+import plLogo from "@/assets/pl-package/loto-logo.png";
+import plClosed from "@/assets/pl-package/closed-package.png";
+import plOpened from "@/assets/pl-package/opened-package.png";
 
-const settings = ref({
+// 🎨 Динамічна кольорова схема
+const colorScheme = computed(() => ({
+  primary: "#1A237E",
+  secondary: "#3949AB",
+  accent: "#5C6BC0",
+  background: "linear-gradient(135deg, #1A237E 0%, #3949AB 50%, #5C6BC0 100%)",
+}));
+
+// ⚙️ Налаштування гри
+const gameSettings = {
   ui: {
     title: "Otwórz paczkę",
     tapHint: "Dotknij, aby otworzyć",
-    claimButton: "Odbierz bonusy",
+    claimButton: "Odbierz bonus",
     nothingLabel: "Nic",
     bonusLabel: "Bonus",
     fsLabel: "FS",
@@ -42,32 +51,30 @@ const settings = ref({
     loaderText: "ŁADOWANIE...",
     currencySymbolMap: { EUR: "€", USD: "$", PLN: "zł", UAH: "₴" },
   },
-  currency: "PLN" as const,
+  currency: "PLN",
   bonusAmount: 3000,
   fsQuantity: 250,
   packsCount: 5,
   openingDurationMs: 1000,
-  dropChances: { nothing: 0.5, bonus: 0.3, fs: 0.2 },
-  bonusPerDropRange: [20, 180] as [number, number],
-  fsPerDropRange: [5, 30] as [number, number],
-});
-
-const offerUrl = ref("https://globespell.gold");
-const logoSrc = ref(
-  new URL("../assets/pl-package/loto-logo.png", import.meta.url).href
-);
-
-const onGameCompleted = (data: any) => {
-  console.log("Game completed:", data);
+  dropChances: {
+    nothing: 0.5,
+    bonus: 0.3,
+    fs: 0.2,
+  },
+  bonusPerDropRange: [20, 180],
+  fsPerDropRange: [5, 30],
 };
 
-const onRewardsClaimed = (data: any) => {
-  console.log("Rewards claimed:", data);
-};
+// 🔗 Посилання на оффер
+const offerUrl = "https://globespell.gold";
+
+// 🧩 Обробники подій
+const onGameCompleted = (_result: any) => {};
+const onRewardsClaimed = (_result: any) => {};
 </script>
 
 <style scoped>
-.pl-package-view {
+.package-opening-view {
   width: 100%;
   height: 100vh;
   overflow: hidden;
