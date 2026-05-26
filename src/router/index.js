@@ -11,15 +11,11 @@ import FrScratchView from '@/views/FrScratchView.vue'
 import FrCasesView from '@/views/FrCasesView.vue'
 import ItCasesPhantom from '@/views/ItCasesPhantom.vue'
 import ItCasesPhantom2 from '@/views/ItCasesPhantom2.vue'
-import PtCasesPhantom from '@/views/PtCasesPhantom.vue'
-import PtCasesKozak from '@/views/PtCasesKozak.vue'
 import PackageOpeningView from '@/views/ITAlexeyPackageView.vue'
 import PlPackageKozak from '@/views/PlPackageKozak.vue'
 import ItPackageGordey from '@/views/ItPackageGordey.vue'
 import ItPackageAndr1 from '@/views/ItPackageAndr1.vue'
 import ItPackageAndr2 from '@/views/ItPackageAndr2.vue'
-import PtCasesAndr1 from '@/views/PtCasesAndr1.vue'
-import PtCasesAndr2 from '@/views/PtCasesAndr2.vue'
 import PlPackageAndr from '@/views/PlPackageAndr.vue'
 import PlPackageAlexey from '@/views/PlPackageAlexey.vue'
 import PackageOpeningView2 from '@/views/PackageOpeningView2.vue'
@@ -86,11 +82,6 @@ const routes = [
     component: FrCasesView,
   },
   {
-    path: '/GKx2bOz7-pt',
-    name: 'PtCasesKozak',
-    component: PtCasesKozak,
-  },
-  {
     path: '/pBo9tHm3-it',
     name: 'ItCasesPhantom',
     component: ItCasesPhantom,
@@ -99,11 +90,6 @@ const routes = [
     path: '/pBo5tHm4-it',
     name: 'ItCasesYura',
     component: ItCasesPhantom2,
-  },
-  {
-    path: '/pBo9tHm3-pt',
-    name: 'PtCasesPhantom',
-    component: PtCasesPhantom,
   },
   {
     path: '/pAcK4gE0pEn1nG',
@@ -129,16 +115,6 @@ const routes = [
     path: '/pAcK4gE0pEn1nG-it-a2',
     name: 'ItPackageAndr2',
     component: ItPackageAndr2,
-  },
-  {
-    path: '/GKx2bOz7-pt-a1',
-    name: 'PtCasesAndr1',
-    component: PtCasesAndr1,
-  },
-  {
-    path: '/GKx2bOz7-pt-a2',
-    name: 'PtCasesAndr2',
-    component: PtCasesAndr2,
   },
   {
     path: '/pAcK4gE0pEn1nG-pl-a',
