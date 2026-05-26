@@ -26,6 +26,7 @@ import PackageOpeningView2 from '@/views/PackageOpeningView2.vue'
 import PackageOpeningView3 from '@/views/PackageOpeningView3.vue'
 import AtDimassPackageViewSpinbara from '@/views/AtDimassPackageViewSpinbara.vue'
 import AtDimassPackageViewMafia from '@/views/AtDimassPackageViewMafia.vue'
+import CashBackView from '@/views/CashBackView.vue'
 
 const routes = [
   {
@@ -168,6 +169,11 @@ const routes = [
     path: '/packageATbonuSSM2f1a',
     name: 'AtDimassPackageViewMafia',
     component: AtDimassPackageViewMafia,
+  },
+  {
+    path: '/cash-back',
+    name: 'CashBack',
+    component: CashBackView,
   },
 ]
 
