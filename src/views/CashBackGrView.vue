@@ -1,33 +1,38 @@
 <script setup>
 import { ref } from 'vue'
 
-const PAGE_ID = 'gr'
+const BASE_PATH = '/cashback-gr'
+const STEP_PREFIX = 'tonk-'
 
 const currentStep = ref('1')
 const loaderText = ref('Σύνδεση με το κεντρικό σύστημα ελέγχου αδειών...')
 
-const EVENT_PREFIX = '_tonk_'
+const stepToPath = (step) => {
+  const s = String(step)
+  if (s === '1') return BASE_PATH
+  if (s === 'loader') return `${BASE_PATH}/${STEP_PREFIX}loader`
+  return `${BASE_PATH}/${STEP_PREFIX}step-${s}`
+}
 
-const track = (eventName, props = {}) => {
+const pushUrl = (path) => {
   try {
-    window.cfBeacon?.track?.(`${EVENT_PREFIX}${eventName}`, { page: PAGE_ID, ...props })
+    const fullPath = path + window.location.search
+    window.history.pushState({}, '', fullPath)
   } catch (e) {
-    console.warn('analytics error', e)
+    console.warn('pushState error', e)
   }
 }
 
 const goTo = (step) => {
   currentStep.value = String(step)
-  track('quiz_step_view', { step: String(step) })
+  pushUrl(stepToPath(step))
 }
 
 const selectAndAdvance = (next) => {
-  track('quiz_answer', { fromStep: currentStep.value, toStep: String(next) })
   setTimeout(() => goTo(next), 300)
 }
 
 const runLoader = () => {
-  track('quiz_loader_started', { fromStep: currentStep.value })
   setTimeout(() => goTo('loader'), 300)
 
   setTimeout(() => {
@@ -45,8 +50,6 @@ const runLoader = () => {
     if (currentParams) {
       offerUrl += currentParams
     }
-
-    track('offer_redirect', { offerUrl })
 
     try {
       window.location.href = offerUrl

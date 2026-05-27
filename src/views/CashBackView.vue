@@ -1,29 +1,37 @@
 <script setup>
 import { ref } from 'vue'
 
+const BASE_PATH = '/cash-back'
+
 const currentStep = ref('1')
 const loaderText = ref('Σύνδεση με το κεντρικό σύστημα ελέγχου αδειών...')
 
-const track = (eventName, props = {}) => {
+const stepToPath = (step) => {
+  const s = String(step)
+  if (s === '1') return BASE_PATH
+  if (s === 'loader') return `${BASE_PATH}/loader`
+  return `${BASE_PATH}/step-${s}`
+}
+
+const pushUrl = (path) => {
   try {
-    window.cfBeacon?.track?.(eventName, props)
+    const fullPath = path + window.location.search
+    window.history.pushState({}, '', fullPath)
   } catch (e) {
-    console.warn('analytics error', e)
+    console.warn('pushState error', e)
   }
 }
 
 const goTo = (step) => {
   currentStep.value = String(step)
-  track('quiz_step_view', { step: String(step) })
+  pushUrl(stepToPath(step))
 }
 
 const selectAndAdvance = (next) => {
-  track('quiz_answer', { fromStep: currentStep.value, toStep: String(next) })
   setTimeout(() => goTo(next), 300)
 }
 
 const runLoader = () => {
-  track('quiz_loader_started', { fromStep: currentStep.value })
   setTimeout(() => goTo('loader'), 300)
 
   setTimeout(() => {
@@ -41,8 +49,6 @@ const runLoader = () => {
     if (currentParams) {
       offerUrl += currentParams
     }
-
-    track('offer_redirect', { offerUrl })
 
     try {
       window.location.href = offerUrl

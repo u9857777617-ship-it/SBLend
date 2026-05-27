@@ -148,12 +148,12 @@ const routes = [
     component: AtDimassPackageViewMafia,
   },
   {
-    path: '/cash-back',
+    path: '/cash-back/:step?',
     name: 'CashBack',
     component: CashBackView,
   },
   {
-    path: '/cashback-gr',
+    path: '/cashback-gr/:step?',
     name: 'CashBackGr',
     component: CashBackGrView,
   },
