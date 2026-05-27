@@ -10,7 +10,18 @@ export default [
       ecmaVersion: 'latest',
       sourceType: 'module',
       globals: {
-        fetch: 'readonly'
+        fetch: 'readonly',
+        window: 'readonly',
+        document: 'readonly',
+        console: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
+        localStorage: 'readonly',
+        sessionStorage: 'readonly',
+        navigator: 'readonly',
+        location: 'readonly'
       }
     },
     rules: {

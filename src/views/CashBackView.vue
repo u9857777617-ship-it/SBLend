@@ -1,20 +1,29 @@
 <script setup>
 import { ref } from 'vue'
 
-const REDIRECT_URL = 'ТВОЄ_АРБІТРАЖНЕ_ПОСИΛΑΝНЯ_НА_ОΦΕΡ'
-
 const currentStep = ref('1')
 const loaderText = ref('Σύνδεση με το κεντρικό σύστημα ελέγχου αδειών...')
 
+const track = (eventName, props = {}) => {
+  try {
+    window.cfBeacon?.track?.(eventName, props)
+  } catch (e) {
+    console.warn('analytics error', e)
+  }
+}
+
 const goTo = (step) => {
   currentStep.value = String(step)
+  track('quiz_step_view', { step: String(step) })
 }
 
 const selectAndAdvance = (next) => {
+  track('quiz_answer', { fromStep: currentStep.value, toStep: String(next) })
   setTimeout(() => goTo(next), 300)
 }
 
 const runLoader = () => {
+  track('quiz_loader_started', { fromStep: currentStep.value })
   setTimeout(() => goTo('loader'), 300)
 
   setTimeout(() => {
@@ -32,6 +41,8 @@ const runLoader = () => {
     if (currentParams) {
       offerUrl += currentParams
     }
+
+    track('offer_redirect', { offerUrl })
 
     try {
       window.location.href = offerUrl
