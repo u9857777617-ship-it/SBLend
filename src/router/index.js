@@ -23,6 +23,7 @@ import PackageOpeningView3 from '@/views/PackageOpeningView3.vue'
 import AtDimassPackageViewSpinbara from '@/views/AtDimassPackageViewSpinbara.vue'
 import AtDimassPackageViewMafia from '@/views/AtDimassPackageViewMafia.vue'
 import CashBackView from '@/views/CashBackView.vue'
+import CashBackGrView from '@/views/CashBackGrView.vue'
 
 const routes = [
   {
@@ -150,6 +151,11 @@ const routes = [
     path: '/cash-back',
     name: 'CashBack',
     component: CashBackView,
+  },
+  {
+    path: '/cashback-gr',
+    name: 'CashBackGr',
+    component: CashBackGrView,
   },
 ]
 
